@@ -19,10 +19,20 @@ module NewestFiles
       commit_sha[0, 8]
     end
 
-    def commit_url(github_repo)
-      return nil unless github_repo
+    def commit_url(remote_repo)
+      return nil unless remote_repo
 
-      "https://github.com/#{github_repo}/commit/#{short_commit}"
+      owner = remote_repo[:owner]
+      repo = remote_repo[:repo]
+
+      case remote_repo[:provider]
+      when :github
+        "https://github.com/#{owner}/#{repo}/commit/#{short_commit}"
+      when :gitlab
+        "https://gitlab.com/#{owner}/#{repo}/-/commit/#{short_commit}"
+      when :bitbucket
+        "https://bitbucket.org/#{owner}/#{repo}/commits/#{short_commit}"
+      end
     end
   end
 end

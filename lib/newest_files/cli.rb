@@ -35,7 +35,7 @@ module NewestFiles
     option :count, aliases: '-n', type: :numeric, default: 10,
                    desc: 'Number of files to show'
     option :urls, aliases: '-u', type: :boolean, default: false,
-                  desc: 'Show GitHub commit URLs (only if origin is GitHub)'
+                  desc: 'Show commit URLs (GitHub, GitLab, Bitbucket)'
     option :directory, aliases: '-C', type: :string, default: '.',
                        desc: 'Git repository directory'
     option :no_color, type: :boolean, default: false,
@@ -54,7 +54,7 @@ module NewestFiles
       formatter = Formatter.new(
         entries,
         show_urls: options[:urls],
-        github_repo: finder.github_repo,
+        remote_repo: finder.remote_repo,
         glob_pattern: glob
       )
 

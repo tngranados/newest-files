@@ -17,11 +17,24 @@ class FileEntryTest < Minitest::Test
   end
 
   def test_commit_url_with_github_repo
-    url = @entry.commit_url('tngranados/newest-files')
+    remote = { provider: :github, owner: 'tngranados', repo: 'newest-files' }
+    url = @entry.commit_url(remote)
     assert_equal 'https://github.com/tngranados/newest-files/commit/abc123de', url
   end
 
-  def test_commit_url_without_github_repo
+  def test_commit_url_with_gitlab_repo
+    remote = { provider: :gitlab, owner: 'tngranados', repo: 'newest-files' }
+    url = @entry.commit_url(remote)
+    assert_equal 'https://gitlab.com/tngranados/newest-files/-/commit/abc123de', url
+  end
+
+  def test_commit_url_with_bitbucket_repo
+    remote = { provider: :bitbucket, owner: 'tngranados', repo: 'newest-files' }
+    url = @entry.commit_url(remote)
+    assert_equal 'https://bitbucket.org/tngranados/newest-files/commits/abc123de', url
+  end
+
+  def test_commit_url_without_remote_repo
     assert_nil @entry.commit_url(nil)
   end
 

@@ -45,7 +45,7 @@ newest-files [OPTIONS] [GLOB]
 | Option        | Alias | Description              | Default |
 | ------------- | ----- | ------------------------ | ------- |
 | `--count`     | `-n`  | Number of files to show  | 10      |
-| `--urls`      | `-u`  | Show GitHub commit URLs  | false   |
+| `--urls`      | `-u`  | Show remote commit URLs  | false   |
 | `--directory` | `-C`  | Git repository directory | `.`     |
 | `--no-color`  |       | Disable colored output   | false   |
 | `--help`      | `-h`  | Show help message        |         |

@@ -84,20 +84,38 @@ module NewestFiles
       entries
     end
 
-    def github_repo
-      return @github_repo if defined?(@github_repo)
+    def remote_repo
+      return @remote_repo if defined?(@remote_repo)
 
       stdout, status = Open3.capture2('git', '-C', directory, 'remote', 'get-url', 'origin')
-      return @github_repo = nil unless status.success?
+      return @remote_repo = nil unless status.success?
 
-      remote_url = stdout.strip
-      # Match GitHub URLs: git@github.com:user/repo.git or https://github.com/user/repo.git
-      return unless remote_url =~ %r{github\.com[/:]([^/]+)/([^/.]+)(?:\.git)?$}
-
-      @github_repo = "#{::Regexp.last_match(1)}/#{::Regexp.last_match(2)}"
+      @remote_repo = parse_remote_url(stdout.strip)
     end
 
     private
+
+    def parse_remote_url(url)
+      # Match common Git hosting providers
+      # Supports: github.com, gitlab.com and bitbucket.org
+      patterns = {
+        github: %r{github\.com[/:]([^/]+)/([^/.]+)(?:\.git)?$},
+        gitlab: %r{gitlab\.com[/:]([^/]+)/([^/.]+)(?:\.git)?$},
+        bitbucket: %r{bitbucket\.org[/:]([^/]+)/([^/.]+)(?:\.git)?$}
+      }
+
+      patterns.each do |provider, pattern|
+        next unless url =~ pattern
+
+        return {
+          provider: provider,
+          owner: ::Regexp.last_match(1),
+          repo: ::Regexp.last_match(2)
+        }
+      end
+
+      nil
+    end
 
     def validate_git_repository!
       _, status = Open3.capture2('git', '-C', directory, 'rev-parse', '--is-inside-work-tree')

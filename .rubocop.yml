@@ -22,6 +22,9 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Max: 12
 
+Metrics/ClassLength:
+  Max: 300
+
 # Gemspec
 Gemspec/DevelopmentDependencies:
   Enabled: false

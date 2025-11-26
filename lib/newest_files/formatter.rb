@@ -3,10 +3,10 @@
 module NewestFiles
   # Formats and prints file entries to the terminal
   class Formatter
-    def initialize(entries, show_urls: false, github_repo: nil, glob_pattern: nil)
+    def initialize(entries, show_urls: false, remote_repo: nil, glob_pattern: nil)
       @entries = entries
       @show_urls = show_urls
-      @github_repo = github_repo
+      @remote_repo = remote_repo
       @glob_pattern = glob_pattern
     end
 
@@ -59,9 +59,9 @@ module NewestFiles
       puts row
 
       # Print URL if enabled and available
-      return unless @show_urls && @github_repo
+      return unless @show_urls && @remote_repo
 
-      url = entry.commit_url(@github_repo)
+      url = entry.commit_url(@remote_repo)
       puts format('%18s %s', '↳', Colors.gray(url))
     end
 
