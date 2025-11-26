@@ -8,6 +8,8 @@ A CLI tool to list the N most-recently-created files in a Git repository. "Creat
 
 In large, long-lived codebases, patterns evolve. Older files may contain legacy approaches you no longer want to replicate. **Always prefer learning from the newest files** in a category—they reflect current best practices, recent refactors, and the team's latest conventions.
 
+This is specially usefuls for AI Agents, as they can use the newer files as reference when implementing similar code. You can use `./llms.txt` as a reference documentation so your agent knows how and when to use it.
+
 ## Installation
 
 ### Homebrew (recommended)

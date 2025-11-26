@@ -1,0 +1,54 @@
+## Finding Reference Files with `newest-files`
+
+### Why This Matters
+In large, long-lived codebases, patterns evolve. Older files may contain legacy approaches we no longer want to replicate. **Always prefer learning from the newest files** in a category—they reflect current best practices, recent refactors, and the team's latest conventions.
+
+### The Tool
+`newest-files` lists the N most-recently-created files in a Git repository, ordered by the commit date when each file was first added. This is NOT modification date—it's true creation date from Git history.
+
+**Syntax:**
+```bash
+newest-files [options] [GLOB]
+```
+
+**Options:**
+- `-n, --count NUMBER` — Number of files to show (default: 10)
+- `GLOB` — Filter by glob pattern (e.g., `"*.rb"`, `"app/services/**/*.rb"`)
+
+### When to Use It
+Use `newest-files` **before writing new code** to find exemplary files to study:
+
+| Task              | Command                                       |
+| ----------------- | --------------------------------------------- |
+| New Ruby file     | `newest-files -n 5 "**/*.rb"`                 |
+| New lib file      | `newest-files -n 5 "lib/**/*.rb"`             |
+| New test file     | `newest-files -n 5 "test/**/*_test.rb"`       |
+| New spec file     | `newest-files -n 5 "spec/**/*_spec.rb"`       |
+| New model         | `newest-files -n 5 "app/models/**/*.rb"`      |
+| New service       | `newest-files -n 5 "app/services/**/*.rb"`    |
+| New controller    | `newest-files -n 5 "app/controllers/**/*.rb"` |
+| New configuration | `newest-files -n 5 "config/**/*.rb"`          |
+
+### Workflow
+1. **Identify the category** of file you need to create (service, model, test, etc.)
+2. **Run `newest-files`** with the appropriate glob to get 3-5 recent examples
+3. **Read those files** to understand current patterns, naming conventions, and structure
+4. **Also check `.templates/`** for the canonical template (templates + recent examples = best guidance)
+5. **Write your new code** following the patterns you observed
+
+### Example
+Finding the newest library files to understand current patterns:
+```bash
+$ newest-files -n 3 "lib/**/*.rb"
+Created          │ Author              │ File                                    │ Commit
+───────────────────────────────────────────────────────────────────────────────────────────
+2025-11-24 17:22 │ Toni Granados       │ lib/newest_files/formatter.rb           │ 1ced2b31
+2025-11-24 15:56 │ Toni Granados       │ lib/newest_files/finder.rb              │ e28a25f1
+2025-11-24 14:50 │ Toni Granados       │ lib/newest_files/cli.rb                 │ 386904e1
+```
+Then read those 3 files to see how the library is currently structured before writing your own.
+
+### Key Benefits
+- **Avoids mimicking legacy code** — Old files may have outdated patterns, deprecated methods, or pre-refactor structures
+- **Learns from recent decisions** — Recent files incorporate lessons learned and current team conventions
+- **Consistent codebase** — New code matches recent code, not code from years ago
