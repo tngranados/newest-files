@@ -13,7 +13,7 @@ In large, long-lived codebases, patterns evolve. Older files may contain legacy 
 ### Homebrew (recommended)
 
 ```bash
-brew tap tngranados/tap
+brew tap tngranados/newest-files
 brew install newest-files
 ```
 
