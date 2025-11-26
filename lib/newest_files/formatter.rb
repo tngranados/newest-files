@@ -1,0 +1,81 @@
+# frozen_string_literal: true
+
+module NewestFiles
+  # Formats and prints file entries to the terminal
+  class Formatter
+    def initialize(entries, show_urls: false, github_repo: nil, glob_pattern: nil)
+      @entries = entries
+      @show_urls = show_urls
+      @github_repo = github_repo
+      @glob_pattern = glob_pattern
+    end
+
+    def print
+      if @entries.empty?
+        puts Colors.yellow("\nNo files found.")
+        return
+      end
+
+      print_table
+      print_summary
+    end
+
+    private
+
+    def print_table
+      # Calculate dynamic column widths based on content
+      max_author = [@entries.map { |e| e.author.length }.max, 20].min
+      max_path = [@entries.map { |e| e.path.length }.max, 60].min
+
+      # Print header
+      puts
+      header = format(
+        "%-16s │ %-#{max_author}s │ %-#{max_path}s │ %-8s",
+        'Created', 'Author', 'File', 'Commit'
+      )
+      puts Colors.bold(header)
+
+      # Print separator
+      separator_width = 16 + max_author + max_path + 8 + 9 # +9 for separators and spaces
+      puts '─' * separator_width
+
+      # Print entries
+      @entries.each do |entry|
+        print_entry(entry, max_author, max_path)
+      end
+    end
+
+    def print_entry(entry, max_author, max_path)
+      author = truncate(entry.author, max_author)
+      path = truncate(entry.path, max_path)
+
+      row = format(
+        "%-16s │ %-#{max_author}s │ %-#{max_path}s │ %-8s",
+        entry.created_at,
+        author,
+        path,
+        entry.short_commit
+      )
+      puts row
+
+      # Print URL if enabled and available
+      return unless @show_urls && @github_repo
+
+      url = entry.commit_url(@github_repo)
+      puts format('%18s %s', '↳', Colors.gray(url))
+    end
+
+    def print_summary
+      puts
+      summary = "Showing #{@entries.size} newest file#{'s' if @entries.size != 1}"
+      summary += " matching '#{@glob_pattern}'" if @glob_pattern
+      puts Colors.gray(summary)
+    end
+
+    def truncate(str, max_length)
+      return str if str.length <= max_length
+
+      "#{str[0, max_length - 1]}…"
+    end
+  end
+end
