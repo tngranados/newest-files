@@ -17,7 +17,7 @@ class NewestFiles < Formula
     end
 
     system 'gem', 'build', 'newest_files.gemspec'
-    system 'gem', 'install', '--ignore-dependencies', '--no-document',
+    system 'gem', 'install', '--local', '--ignore-dependencies', '--no-document',
            '--install-dir', libexec, "newest_files-#{version}.gem"
 
     bin.install libexec / 'bin/newest-files'
