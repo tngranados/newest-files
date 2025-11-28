@@ -3,8 +3,8 @@
 class NewestFiles < Formula
   desc 'List the N most-recently-created files in a Git repository'
   homepage 'https://github.com/tngranados/newest-files'
-  url 'https://github.com/tngranados/newest-files/archive/refs/tags/v1.0.1.tar.gz'
-  sha256 '3a20d7ccc795ed8504a521f44e26f6b78a6c94fd9c628e77373f4353daf76146'
+  url 'https://github.com/tngranados/newest-files/archive/refs/tags/v1.0.2.tar.gz'
+  sha256 '36fa88ee8ea9dc0c1869a8515d6d564b63b2178da4d659ec40232805cf3650c4'
 
   depends_on 'ruby'
 
