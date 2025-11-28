@@ -43,11 +43,21 @@ jobs:
       - name: Build gem
         run: gem build newest_files.gemspec
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: newest_files-${{ steps.get_version.outputs.VERSION }}.gem
-          generate_release_notes: true
+      - name: Commit version update and move tag
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add lib/newest_files/version.rb
+          git commit -m "Bump version to ${VERSION}" || echo "No changes to commit"
+          
+          # Move the tag to the new commit that includes the version update
+          git tag -f "v${VERSION}"
+          git push origin main
+          git push origin "v${VERSION}" --force
+          
+          # Wait for GitHub to update the tarball
+          sleep 5
 
       - name: Calculate SHA256 of tarball
         id: sha256
@@ -75,10 +85,17 @@ jobs:
 
           cat Formula/newest-files.rb
 
-      - name: Commit updated formula and version
+      - name: Commit updated formula
         run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Formula/newest-files.rb lib/newest_files/version.rb
-          git commit -m "Update Homebrew formula for v${{ steps.get_version.outputs.VERSION }}" || echo "No changes to commit"
+          git add Formula/newest-files.rb
+          git commit -m "Update Homebrew formula for v${VERSION}" || echo "No changes to commit"
           git push origin main
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: newest_files-${{ steps.get_version.outputs.VERSION }}.gem
+          generate_release_notes: true
