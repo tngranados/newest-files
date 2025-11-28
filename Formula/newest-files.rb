@@ -8,11 +8,6 @@ class NewestFiles < Formula
 
   depends_on 'ruby'
 
-  resource 'thor' do
-    url 'https://rubygems.org/downloads/thor-1.3.2.gem'
-    sha256 'eef0293b9e24158ccad7ab383ae83534b7ad4ed99c09f96f1a6b036550abbeda'
-  end
-
   def install
     ENV['GEM_HOME'] = libexec
     resources.each do |r|
