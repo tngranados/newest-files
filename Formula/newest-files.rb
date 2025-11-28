@@ -25,7 +25,7 @@ class NewestFiles < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/newest-files version")
-    assert_match 'List the N most-recently-created files', shell_output("#{bin}/newest-files help list")
+    assert_match version.to_s, shell_output("#{bin}/newest-files --version")
+    assert_match 'List the N most-recently-created files', shell_output("#{bin}/newest-files --help")
   end
 end
