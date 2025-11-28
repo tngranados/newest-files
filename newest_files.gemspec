@@ -33,9 +33,6 @@ Gem::Specification.new do |spec|
   spec.executables = ['newest-files']
   spec.require_paths = ['lib']
 
-  # Runtime dependencies
-  spec.add_dependency 'thor', '~> 1.3'
-
   # Development dependencies
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'minitest', '~> 5.0'

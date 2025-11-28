@@ -1,47 +1,22 @@
 # frozen_string_literal: true
 
-require 'thor'
+require 'optparse'
 
 module NewestFiles
-  # CLI interface using Thor
-  class CLI < Thor
-    default_command :list
-
-    def self.exit_on_failure?
-      true
+  # CLI interface using OptionParser
+  class CLI
+    def self.start(argv = ARGV)
+      new.run(argv)
     end
 
-    desc 'list [GLOB]', 'List the N most-recently-created files in a Git repository'
-    long_desc <<~DESC
-      List the N most-recently-created files in a Git repository.
+    def run(argv)
+      options = parse_options(argv)
 
-      "Creation" is defined as the first commit that added the file (--diff-filter=A).
-      This is useful for finding recent patterns and conventions in large codebases.
+      return puts("newest-files #{VERSION}") if options[:version]
 
-      Examples:
-
-        $ newest-files                        # Show 10 newest files
-
-        $ newest-files -n 20                  # Show 20 newest files
-
-        $ newest-files --urls                 # Show with GitHub commit URLs
-
-        $ newest-files "*.rb"                 # Show newest Ruby files
-
-        $ newest-files "app/models/**/*.rb"   # Show newest model files
-
-        $ newest-files -n 5 "src/**/*.py"     # Show 5 newest Python files
-    DESC
-    option :count, aliases: '-n', type: :numeric, default: 10,
-                   desc: 'Number of files to show'
-    option :urls, aliases: '-u', type: :boolean, default: false,
-                  desc: 'Show commit URLs (GitHub, GitLab, Bitbucket)'
-    option :directory, aliases: '-C', type: :string, default: '.',
-                       desc: 'Git repository directory'
-    option :no_color, type: :boolean, default: false,
-                      desc: 'Disable colored output'
-    def list(glob = nil)
       Colors.enabled = false if options[:no_color]
+
+      glob = argv.first
 
       finder = Finder.new(
         directory: options[:directory],
@@ -65,11 +40,62 @@ module NewestFiles
       exit 1
     end
 
-    desc 'version', 'Print the version'
-    def version
-      puts "newest-files #{VERSION}"
-    end
+    private
 
-    map %w[-v --version] => :version
+    def parse_options(argv)
+      options = {
+        count: 10,
+        urls: false,
+        directory: '.',
+        no_color: false,
+        version: false
+      }
+
+      parser = OptionParser.new do |opts|
+        opts.banner = 'Usage: newest-files [options] [GLOB]'
+        opts.separator ''
+        opts.separator 'List the N most-recently-created files in a Git repository.'
+        opts.separator '"Creation" is defined as the first commit that added the file (--diff-filter=A).'
+        opts.separator 'This is useful for finding recent patterns and conventions in large codebases.'
+        opts.separator ''
+        opts.separator 'Examples:'
+        opts.separator '  newest-files                        # Show 10 newest files'
+        opts.separator '  newest-files -n 20                  # Show 20 newest files'
+        opts.separator '  newest-files --urls                 # Show with GitHub commit URLs'
+        opts.separator '  newest-files "*.rb"                 # Show newest Ruby files'
+        opts.separator '  newest-files "app/models/**/*.rb"   # Show newest model files'
+        opts.separator '  newest-files -n 5 "src/**/*.py"     # Show 5 newest Python files'
+        opts.separator ''
+        opts.separator 'Options:'
+
+        opts.on('-n', '--count NUMBER', Integer, 'Number of files to show (default: 10)') do |n|
+          options[:count] = n
+        end
+
+        opts.on('-u', '--urls', 'Show commit URLs (GitHub, GitLab, Bitbucket)') do
+          options[:urls] = true
+        end
+
+        opts.on('-C', '--directory DIR', 'Git repository directory (default: .)') do |dir|
+          options[:directory] = dir
+        end
+
+        opts.on('--no-color', 'Disable colored output') do
+          options[:no_color] = true
+        end
+
+        opts.on('-v', '--version', 'Print the version') do
+          options[:version] = true
+        end
+
+        opts.on('-h', '--help', 'Show this help message') do
+          puts opts
+          exit
+        end
+      end
+
+      parser.parse!(argv)
+      options
+    end
   end
 end
