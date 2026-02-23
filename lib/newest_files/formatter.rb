@@ -28,7 +28,7 @@ module NewestFiles
 
       # Calculate dynamic column widths based on content
       max_author = [@entries.map { |e| e.author.length }.max, 20].min
-      max_path = [display_paths.max_by(&:length).length, 60].min
+      max_path = display_paths.max_by(&:length).length
 
       # Print header
       puts
@@ -50,7 +50,7 @@ module NewestFiles
 
     def print_entry(entry, max_author, max_path)
       author = truncate(entry.author, max_author)
-      path = truncate(display_path(entry.path), max_path)
+      path = display_path(entry.path)
 
       row = format(
         "%-16s │ %-#{max_author}s │ %-#{max_path}s │ %-8s",
