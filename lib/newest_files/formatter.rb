@@ -84,7 +84,7 @@ module NewestFiles
     def display_path(path)
       return path unless @path_prefix_to_strip && path.start_with?(@path_prefix_to_strip)
 
-      path.delete_prefix(@path_prefix_to_strip)
+      "…/#{path.delete_prefix(@path_prefix_to_strip)}"
     end
 
     def path_prefix_from_glob(pattern)

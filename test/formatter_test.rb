@@ -4,7 +4,7 @@ require 'test_helper'
 require 'stringio'
 
 class FormatterTest < Minitest::Test
-  def test_print_strips_static_glob_prefix
+  def test_print_replaces_stripped_glob_prefix_with_ellipsis
     entry = NewestFiles::FileEntry.new(
       created_at: '2026-02-18 14:10',
       author: 'Marco',
@@ -19,7 +19,7 @@ class FormatterTest < Minitest::Test
       ).print
     end
 
-    assert_includes output, 'settings/team/absence_reasons/create_absence_reason.rb'
+    assert_includes output, '…/settings/team/absence_reasons/create_absence_reason.rb'
     refute_includes output, 'app/graphql/mutations/alkimii/settings/team/absence_reasons/create_absence_reason.rb'
   end
 
@@ -54,7 +54,7 @@ class FormatterTest < Minitest::Test
     end
 
     assert_includes output,
-                    'settings/team/absence_reasons/deeply/nested/folder/with/a/very_long_file_name_that_should_not_be_truncated.rb'
+                    '…/settings/team/absence_reasons/deeply/nested/folder/with/a/very_long_file_name_that_should_not_be_truncated.rb'
   end
 
   private
