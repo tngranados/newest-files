@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-02-23
+
+### Changed
+
+- Shorten displayed file paths by stripping the static prefix from the provided glob pattern.
+- Stop truncating file paths in output rows so the full (post-prefix) path is always visible.
+
 ## [1.0.0] - 2025-11-26
 
 ### Added
