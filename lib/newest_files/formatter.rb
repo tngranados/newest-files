@@ -8,6 +8,7 @@ module NewestFiles
       @show_urls = show_urls
       @remote_repo = remote_repo
       @glob_pattern = glob_pattern
+      @path_prefix_to_strip = path_prefix_from_glob(glob_pattern)
     end
 
     def print
@@ -23,9 +24,11 @@ module NewestFiles
     private
 
     def print_table
+      display_paths = @entries.map { |entry| display_path(entry.path) }
+
       # Calculate dynamic column widths based on content
       max_author = [@entries.map { |e| e.author.length }.max, 20].min
-      max_path = [@entries.map { |e| e.path.length }.max, 60].min
+      max_path = [display_paths.max_by(&:length).length, 60].min
 
       # Print header
       puts
@@ -47,7 +50,7 @@ module NewestFiles
 
     def print_entry(entry, max_author, max_path)
       author = truncate(entry.author, max_author)
-      path = truncate(entry.path, max_path)
+      path = truncate(display_path(entry.path), max_path)
 
       row = format(
         "%-16s │ %-#{max_author}s │ %-#{max_path}s │ %-8s",
@@ -76,6 +79,24 @@ module NewestFiles
       return str if str.length <= max_length
 
       "#{str[0, max_length - 1]}…"
+    end
+
+    def display_path(path)
+      return path unless @path_prefix_to_strip && path.start_with?(@path_prefix_to_strip)
+
+      path.delete_prefix(@path_prefix_to_strip)
+    end
+
+    def path_prefix_from_glob(pattern)
+      return nil unless pattern
+
+      normalized_pattern = pattern.sub(%r{\A\./}, '')
+      wildcard_index = normalized_pattern.index(/[*?\[{]/)
+      static_part = wildcard_index ? normalized_pattern[0...wildcard_index] : normalized_pattern
+      last_slash_index = static_part.rindex('/')
+      return nil unless last_slash_index
+
+      static_part[0..last_slash_index]
     end
   end
 end
