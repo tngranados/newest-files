@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'open3'
-require 'set'
 
 module NewestFiles
   # Core logic for finding newest files in a Git repository
