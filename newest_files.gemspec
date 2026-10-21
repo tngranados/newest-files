@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
                      'in large codebases.'
   spec.homepage = 'https://github.com/tngranados/newest-files'
   spec.license = 'MIT'
-  spec.required_ruby_version = '>= 3.2.0'
+  spec.required_ruby_version = '>= 3.3.0'
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
@@ -34,7 +34,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   # Development dependencies
-  spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rubocop', '~> 1.21'

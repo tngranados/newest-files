@@ -108,7 +108,7 @@ Showing 3 newest files matching 'lib/**/*.rb'
 
 ## Requirements
 
-- Ruby 3.2+
+- Ruby 3.3+
 - Git
 
 ## Development
