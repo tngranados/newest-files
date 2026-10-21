@@ -18,10 +18,13 @@ This is specially usefuls for AI Agents, as they can use the newer files as refe
 brew install tngranados/tap/newest-files
 ```
 
-### RubyGems
+### From a GitHub release
+
+Each [release](https://github.com/tngranados/newest-files/releases) includes the gem:
 
 ```bash
-gem install newest_files
+gh release download -R tngranados/newest-files -p 'newest_files-*.gem'
+gem install newest_files-*.gem
 ```
 
 ### From source
