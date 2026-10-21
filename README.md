@@ -15,8 +15,7 @@ This is specially usefuls for AI Agents, as they can use the newer files as refe
 ### Homebrew (recommended)
 
 ```bash
-brew tap tngranados/newest-files
-brew install newest-files
+brew install tngranados/tap/newest-files
 ```
 
 ### RubyGems
